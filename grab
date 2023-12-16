@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ $# -eq 0 ]
 then
   selected=$(ls -p | fzf --bind "ctrl-a:select-all" --bind "ctrl-d:deselect-all" -m)
@@ -10,14 +12,15 @@ then
   file=~/.grab/selected
 
   out=""
-  IFS=' ' read -ra a <<< $(echo $selected)
+  IFS=' ' read -ra items <<< $(echo $selected)
 
-  for line in ${a[@]}
+  for item in ${items[@]}
   do
-    out="$out $PWD/$line"
+    out="$out $PWD/$item"
   done
 
-  echo $out > $file
+  # trim last space with xargs
+  echo $(echo $out | xargs) > $file
 fi
 
 dir=.
@@ -29,24 +32,24 @@ fi
 
 if [ $# -gt 0 ]
 then
-  input="$HOME/.grab/selected"
-  IFS=' ' read -ra arr <<< $(cat $input)
+  file="$HOME/.grab/selected"
+  IFS=' ' read -ra items <<< $(cat $file)
 
   if [ $1 == "cut" ]
   then
-    for line in ${arr[@]} 
+    for item in ${items[@]} 
     do
-      mv $line $dir 
+      mv $item $dir 
     done
   elif [ $1 == "copy" ]
   then
-    for line in ${arr[@]} 
+    for item in ${items[@]} 
     do
-      if [[ $line == */ ]]
+      if [[ $item == */ ]]
       then
-        cp -r $line $dir 
+        cp -r $item $dir 
       else
-        cp $line $dir
+        cp $item $dir
       fi
     done
   else
