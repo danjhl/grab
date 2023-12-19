@@ -31,7 +31,7 @@ if ($args.Count -eq 0) {
 
 $dir = "."
 if ($args.Count -gt 1) {
-    $dir = $args[2]
+    $dir = $args[1]
 }
 
 if ($args.Count -gt 0) {
