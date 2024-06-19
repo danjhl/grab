@@ -1,14 +1,10 @@
 if ($args.Count -eq 0) {
-    $files = Get-ChildItem -File
-    $directories = Get-ChildItem -Directory
+    $childItems = Get-ChildItem -Force
 
     $arr = @()
 
-    foreach ($file in $files) {
-        $arr = $arr + $file.Name
-    }
-    foreach ($dir in $directories) {
-        $arr = $arr + "$dir/"
+    foreach ($item in $childItems) {
+        $arr = $arr + $item.Name
     }
 
     $selected = $(echo $arr | fzf --bind "ctrl-a:select-all" --bind "ctrl-d:deselect-all" -m)
@@ -43,11 +39,7 @@ if ($args.Count -gt 0) {
         if ($command -eq "cut") {
             mv $item $dir
         } elseif ($command -eq "copy") {
-            if ($item.endsWith("/")) {
-                cp -r $item $dir
-            } else {
-                cp $item $dir
-            }
+            cp -r $item $dir
         } else {
             echo "unknown command $command"
             exit 1
