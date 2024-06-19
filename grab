@@ -2,7 +2,7 @@
 
 if [ $# -eq 0 ]
 then
-  selected=$(ls -p | fzf --bind "ctrl-a:select-all" --bind "ctrl-d:deselect-all" -m)
+  selected=$(ls -A | fzf --bind "ctrl-a:select-all" --bind "ctrl-d:deselect-all" -m)
   if [ -z "$selected" ]
   then
     exit 1
@@ -45,12 +45,7 @@ then
   then
     for item in ${items[@]} 
     do
-      if [[ $item == */ ]]
-      then
-        cp -r $item $dir 
-      else
-        cp $item $dir
-      fi
+      cp -r $item $dir
     done
   else
     echo "unknown command $1"
